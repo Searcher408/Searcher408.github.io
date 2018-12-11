@@ -112,58 +112,58 @@
 <meta name="keywords" content="Life">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DigitalOcean搭建VPS实现科学上网">
-<meta property="og:url" content="https://Sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/index.html">
-<meta property="og:site_name" content="Sercher408&#39;Notes">
+<meta property="og:url" content="https://Searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/index.html">
+<meta property="og:site_name" content="Searcher408&#39;Notes">
 <meta property="og:description" content="DigitalOcean搭建VPS实现科学上网一.简介提起科学上网首先想到的就是 VPN（虚拟专用网络），现在网络上的各种 VPN 层出不穷。不过VPN 用起来却并不友好，免费的不稳定，而且有流量和网速限制，甚至有些还有广告；收费的又太贵，一般人也不愿意花那些钱。那么最好的解决方法就是自己搭建 VPS（虚拟专用服务器） 。 DigitalOcean 是一家云基础架构提供商，为用户提供虚拟专用服务器">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/1.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/2.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/3.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/4.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/5.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/6.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/7.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/8.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/9.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/10.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/11.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/12.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/13.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/14.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/15.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/16.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/17.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/18.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/19.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/20.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/21.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/22.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/23.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/24.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/25.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/26.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/27.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/28.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/29.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/30.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/31.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/32.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/33.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/34.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/35.png">
-<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/36.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/1.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/2.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/3.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/4.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/5.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/6.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/7.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/8.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/9.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/10.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/11.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/12.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/13.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/14.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/15.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/16.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/17.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/18.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/19.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/20.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/21.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/22.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/23.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/24.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/25.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/26.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/27.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/28.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/29.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/30.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/31.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/32.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/33.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/34.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/35.png">
+<meta property="og:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/36.png">
 <meta property="og:updated_time" content="2018-12-11T12:25:53.199Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DigitalOcean搭建VPS实现科学上网">
 <meta name="twitter:description" content="DigitalOcean搭建VPS实现科学上网一.简介提起科学上网首先想到的就是 VPN（虚拟专用网络），现在网络上的各种 VPN 层出不穷。不过VPN 用起来却并不友好，免费的不稳定，而且有流量和网速限制，甚至有些还有广告；收费的又太贵，一般人也不愿意花那些钱。那么最好的解决方法就是自己搭建 VPS（虚拟专用服务器） 。 DigitalOcean 是一家云基础架构提供商，为用户提供虚拟专用服务器">
-<meta name="twitter:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/1.png">
+<meta name="twitter:image" content="https://searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://Sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/"/>
+  <link rel="canonical" href="https://Searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/"/>
 
 
 
@@ -173,7 +173,7 @@
   };
 </script>
 
-  <title>DigitalOcean搭建VPS实现科学上网 | Sercher408'Notes</title>
+  <title>DigitalOcean搭建VPS实现科学上网 | Searcher408'Notes</title>
   
 
 
@@ -233,7 +233,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Sercher408'Notes</span>
+        <span class="site-title">Searcher408'Notes</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -348,7 +348,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://Sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/">
+    <link itemprop="mainEntityOfPage" href="https://Searcher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yoc Lu">
@@ -357,7 +357,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Sercher408'Notes">
+      <meta itemprop="name" content="Searcher408'Notes">
     </span>
 
     
