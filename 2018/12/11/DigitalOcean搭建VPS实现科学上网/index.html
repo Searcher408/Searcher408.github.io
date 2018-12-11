@@ -117,6 +117,7 @@
 <meta property="og:description" content="DigitalOcean搭建VPS实现科学上网一.简介提起科学上网首先想到的就是 VPN（虚拟专用网络），现在网络上的各种 VPN 层出不穷。不过VPN 用起来却并不友好，免费的不稳定，而且有流量和网速限制，甚至有些还有广告；收费的又太贵，一般人也不愿意花那些钱。那么最好的解决方法就是自己搭建 VPS（虚拟专用服务器） 。 DigitalOcean 是一家云基础架构提供商，为用户提供虚拟专用服务器">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/1.png">
+<meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/1.png">
 <meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/2.png">
 <meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/3.png">
 <meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/4.png">
@@ -152,7 +153,7 @@
 <meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/34.png">
 <meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/35.png">
 <meta property="og:image" content="https://sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/36.png">
-<meta property="og:updated_time" content="2018-12-11T12:08:05.832Z">
+<meta property="og:updated_time" content="2018-12-11T12:15:46.014Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DigitalOcean搭建VPS实现科学上网">
 <meta name="twitter:description" content="DigitalOcean搭建VPS实现科学上网一.简介提起科学上网首先想到的就是 VPN（虚拟专用网络），现在网络上的各种 VPN 层出不穷。不过VPN 用起来却并不友好，免费的不稳定，而且有流量和网速限制，甚至有些还有广告；收费的又太贵，一般人也不愿意花那些钱。那么最好的解决方法就是自己搭建 VPS（虚拟专用服务器） 。 DigitalOcean 是一家云基础架构提供商，为用户提供虚拟专用服务器">
@@ -390,7 +391,7 @@
                 
               
 
-              <time title="创建时间：2018-12-11 17:30:04 / 修改时间：20:08:05" itemprop="dateCreated datePublished" datetime="2018-12-11T17:30:04+08:00">2018-12-11</time>
+              <time title="创建时间：2018-12-11 17:30:04 / 修改时间：20:15:46" itemprop="dateCreated datePublished" datetime="2018-12-11T17:30:04+08:00">2018-12-11</time>
             
 
             
@@ -430,7 +431,7 @@
       
         <h1 id="DigitalOcean搭建VPS实现科学上网"><a href="#DigitalOcean搭建VPS实现科学上网" class="headerlink" title="DigitalOcean搭建VPS实现科学上网"></a>DigitalOcean搭建VPS实现科学上网</h1><h2 id="一-简介"><a href="#一-简介" class="headerlink" title="一.简介"></a>一.简介</h2><p>提起科学上网首先想到的就是 VPN（虚拟专用网络），现在网络上的各种 VPN 层出不穷。不过VPN 用起来却并不友好，免费的不稳定，而且有流量和网速限制，甚至有些还有广告；收费的又太贵，一般人也不愿意花那些钱。那么最好的解决方法就是自己搭建 VPS（虚拟专用服务器） 。</p>
 <p><strong><em>DigitalOcean 是一家云基础架构提供商，为用户提供虚拟专用服务器。Shadowsocks 是一款代理软件，分为服务器端和客户端。在使用之前，需要先将服务器端部署到服务器上面，然后通过客户端连接并创建本地代理，便可以实现科学上网。</em></strong></p>
-<p>DigitalOcean 与 GitHub 合作，为学生用户提供了 50 美元的优惠，而 DigitalOcean 上面最便宜的服务器是每个月 5 美元，只用来科学上网的话完全够用，这样就可以使用 10 个月了。同时，DigitalOcean 提供一种邀请奖励机制：Give $10, Get $25。意思是别人点击你的邀请链接注册后，他可以得到 10 美元。而当他在 DigitalOcean 上面累计消费了 25 美元之后，你就可以得到 25 美元的奖励。(最近加大优惠力度为 Give $100， Get $25）<br><img src="/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/1.png" width="85%"></p>
+<p>DigitalOcean 与 GitHub 合作，为学生用户提供了 50 美元的优惠，而 DigitalOcean 上面最便宜的服务器是每个月 5 美元，只用来科学上网的话完全够用，这样就可以使用 10 个月了。同时，DigitalOcean 提供一种邀请奖励机制：Give $10, Get $25。意思是别人点击你的邀请链接注册后，他可以得到 10 美元。而当他在 DigitalOcean 上面累计消费了 25 美元之后，你就可以得到 25 美元的奖励。(最近加大优惠力度为 Give $100， Get $25）<br><img src="/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/1.png" alt=""><br><img src="/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/1.png" width="85%"></p>
 <h2 id="二-学生优惠"><a href="#二-学生优惠" class="headerlink" title="二.学生优惠"></a>二.学生优惠</h2><p>首先领取学生优惠，如果你不是学生，那么可以直接跳到后面注册 DigitalOcean 部分，来注册获得 100美元的邀请奖励。如果你不是学生却又想领取学生优惠，那么你可以找学生朋友帮忙，借他们的学校邮箱来用（大多数学校都会给学生提供学校邮箱），只会用到几封邮件，不会对他们的隐私信息造成损害，相信很多人还是愿意的。具体的优惠政策是这样：DigitalOcean 提供的 50 美元的优惠是和 GitHub 合作的，在 GitHub 上面进行了学生认证后，可以得到一个在 DigitalOcean 上面使用的优惠码。我们用优惠码去 DigitalOcean 兑换，账户就可以获得 50 美元了。</p>
 <h3 id="三-申请教育邮箱"><a href="#三-申请教育邮箱" class="headerlink" title="三.申请教育邮箱"></a>三.申请教育邮箱</h3><p>首先进入学校的邮件系统，一般网址为 <a href="https://mail.学校英文简称.edu.cn/" target="_blank" rel="noopener">https://mail.学校英文简称.edu.cn/</a><br>然后申请学校的邮箱，具体怎么申请还是要看自己学校的说明。</p>
 <h3 id="四-申请-GitHub-学生优惠"><a href="#四-申请-GitHub-学生优惠" class="headerlink" title="四.申请 GitHub 学生优惠"></a>四.申请 GitHub 学生优惠</h3><p>点击链接 <a href="https://education.github.com/pack" target="_blank" rel="noopener">Student Developer Pack</a> 进入如下页面：<br><img src="/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/2.png" width="85%"><br>点击 Get your pack，进入 GitHub 登录页面。如果你已经有了 GitHub 账号，那么直接输入用户名和密码，点击 Sign in 登录。如果还没有就需要先注册一个GitHub账号。<br>注意：注册时邮箱最好写学校的邮箱，因为学校邮箱方便验证学生身份，如果选择其他邮箱后面步骤验证学生身份可能会遇到点麻烦（可能会接收不到验证邮件或遇到其他比较坑爹的问题，具体情况得看运气）。<br><img src="/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/3.png" width="85%"><br>之后再点击 Student Developer Pack 页面的 Yes，I’m a student 进入以下页面。<br><img src="/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/4.png" width="85%"><br>在 Verify academic status 那里，需要选择你的学校邮箱。如果你之前注册用的就是学校邮箱，那么就直接填入。但如果你之前注册时用的是自己的常用邮箱，那么你还需要点下面的 add and verify it 添加和验证学校邮箱（这里可能需要耐心等待GitHub审核，所以前面推荐直接用学校邮箱注册）。成功后这个列表就会有两个邮箱地址，然后选择学校邮箱。School name 就填学校的英文全称，Graduation year 选你的毕业年份，How do you plan to use Github 主要写你打算用 GitHub 干什么（用英文随便写一些：I’ll learn about programming and manage the project on GitHub.）。优惠能不能申请成功主要是看学校的邮箱。全部填完后点击 Submit Request 进入如下页面。<br><img src="/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/5.png" width="85%"><br>然后点击上面的 Student pack，页面跳转后再点击 Get your pack，便成功领到了学生礼包。页面往下翻，看到 DigitalOcean，点击 Request your offer code to get access，即可看到你的优惠码。将这个优惠码保存下来，后面会用到。<br><img src="/2018/12/11/DigitalOcean搭建VPS实现科学上网/DigitalOcean/6.png" width="60%"></p>
