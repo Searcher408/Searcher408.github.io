@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.jpg?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.jpg?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.jpg?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="DigitalOcean搭建VPS实现科学上网一.简介提起科学上网首先想到的就是 VPN（虚拟专用网络），现在网络上的各种 VPN 层出不穷。不过VPN 用起来却并不友好，免费的不稳定，而且有流量和网速限制，甚至有些还有广告；收费的又太贵，一般人也不愿意花那些钱。那么最好的解决方法就是自己搭建 VPS（虚拟专用服务器） 。 DigitalOcean 是一家云基础架构提供商，为用户提供虚拟专用服务器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DigitalOcean搭建VPS实现科学上网">
+<meta property="og:url" content="https://Sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/index.html">
+<meta property="og:site_name" content="Sercher408&#39;Notes">
+<meta property="og:description" content="DigitalOcean搭建VPS实现科学上网一.简介提起科学上网首先想到的就是 VPN（虚拟专用网络），现在网络上的各种 VPN 层出不穷。不过VPN 用起来却并不友好，免费的不稳定，而且有流量和网速限制，甚至有些还有广告；收费的又太贵，一般人也不愿意花那些钱。那么最好的解决方法就是自己搭建 VPS（虚拟专用服务器） 。 DigitalOcean 是一家云基础架构提供商，为用户提供虚拟专用服务器">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208141208581.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208141801858.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208142526254.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208143234198.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208143554706.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208143858976.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208144707187.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208144341862.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208144737725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208144853827.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208145118859.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208145135608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181208145437726.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2018120814564570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209192013309.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209192216747.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209192418676.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209192730141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209192635472.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209192828298.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209193014157.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/201812091932018.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209193542250.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209202852886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209200817659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209200837329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209200951925.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209201018437.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2018120920104055.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209210246879.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209211010687.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209201438138.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209201535991.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209201809793.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209201835421.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181209202206577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2018-12-11T09:35:19.763Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DigitalOcean搭建VPS实现科学上网">
+<meta name="twitter:description" content="DigitalOcean搭建VPS实现科学上网一.简介提起科学上网首先想到的就是 VPN（虚拟专用网络），现在网络上的各种 VPN 层出不穷。不过VPN 用起来却并不友好，免费的不稳定，而且有流量和网速限制，甚至有些还有广告；收费的又太贵，一般人也不愿意花那些钱。那么最好的解决方法就是自己搭建 VPS（虚拟专用服务器） 。 DigitalOcean 是一家云基础架构提供商，为用户提供虚拟专用服务器">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20181208141208581.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70">
+
+
+
+
+
+
+  <link rel="canonical" href="https://Sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>DigitalOcean搭建VPS实现科学上网 | Sercher408'Notes</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+  <a href="https://github.com/Searcher408"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sercher408'Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Quick notes</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://Sercher408.github.io/2018/12/11/DigitalOcean搭建VPS实现科学上网/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yoc Lu">
+      <meta itemprop="description" content="But I have promises to keep. And miles to go before I sleep.">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sercher408'Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DigitalOcean搭建VPS实现科学上网
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-11 17:30:04 / 修改时间：17:35:19" itemprop="dateCreated datePublished" datetime="2018-12-11T17:30:04+08:00">2018-12-11</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="DigitalOcean搭建VPS实现科学上网"><a href="#DigitalOcean搭建VPS实现科学上网" class="headerlink" title="DigitalOcean搭建VPS实现科学上网"></a>DigitalOcean搭建VPS实现科学上网</h1><h2 id="一-简介"><a href="#一-简介" class="headerlink" title="一.简介"></a>一.简介</h2><p>提起科学上网首先想到的就是 VPN（虚拟专用网络），现在网络上的各种 VPN 层出不穷。不过VPN 用起来却并不友好，免费的不稳定，而且有流量和网速限制，甚至有些还有广告；收费的又太贵，一般人也不愿意花那些钱。那么最好的解决方法就是自己搭建 VPS（虚拟专用服务器） 。</p>
+<p><strong><em>DigitalOcean 是一家云基础架构提供商，为用户提供虚拟专用服务器。Shadowsocks 是一款代理软件，分为服务器端和客户端。在使用之前，需要先将服务器端部署到服务器上面，然后通过客户端连接并创建本地代理，便可以实现科学上网。</em></strong></p>
+<p>DigitalOcean 与 GitHub 合作，为学生用户提供了 50 美元的优惠，而 DigitalOcean 上面最便宜的服务器是每个月 5 美元，只用来科学上网的话完全够用，这样就可以使用 10 个月了。同时，DigitalOcean 提供一种邀请奖励机制：Give $10, Get $25。意思是别人点击你的邀请链接注册后，他可以得到 10 美元。而当他在 DigitalOcean 上面累计消费了 25 美元之后，你就可以得到 25 美元的奖励。(最近加大优惠力度为 Give $100， Get $25）<br><img src="https://img-blog.csdnimg.cn/20181208141208581.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="85%"></p>
+<h2 id="二-学生优惠"><a href="#二-学生优惠" class="headerlink" title="二.学生优惠"></a>二.学生优惠</h2><p>首先领取学生优惠，如果你不是学生，那么可以直接跳到后面注册 DigitalOcean 部分，来注册获得 100美元的邀请奖励。如果你不是学生却又想领取学生优惠，那么你可以找学生朋友帮忙，借他们的学校邮箱来用（大多数学校都会给学生提供学校邮箱），只会用到几封邮件，不会对他们的隐私信息造成损害，相信很多人还是愿意的。具体的优惠政策是这样：DigitalOcean 提供的 50 美元的优惠是和 GitHub 合作的，在 GitHub 上面进行了学生认证后，可以得到一个在 DigitalOcean 上面使用的优惠码。我们用优惠码去 DigitalOcean 兑换，账户就可以获得 50 美元了。</p>
+<h3 id="三-申请教育邮箱"><a href="#三-申请教育邮箱" class="headerlink" title="三.申请教育邮箱"></a>三.申请教育邮箱</h3><p>首先进入学校的邮件系统，一般网址为 <a href="https://mail.学校英文简称.edu.cn/" target="_blank" rel="noopener">https://mail.学校英文简称.edu.cn/</a><br>然后申请学校的邮箱，具体怎么申请还是要看自己学校的说明。</p>
+<h3 id="四-申请-GitHub-学生优惠"><a href="#四-申请-GitHub-学生优惠" class="headerlink" title="四.申请 GitHub 学生优惠"></a>四.申请 GitHub 学生优惠</h3><p>点击链接 <a href="https://education.github.com/pack" target="_blank" rel="noopener">Student Developer Pack</a> 进入如下页面：<br><img src="https://img-blog.csdnimg.cn/20181208141801858.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="85%"><br>点击 Get your pack，进入 GitHub 登录页面。如果你已经有了 GitHub 账号，那么直接输入用户名和密码，点击 Sign in 登录。如果还没有就需要先注册一个GitHub账号。<br>注意：注册时邮箱最好写学校的邮箱，因为学校邮箱方便验证学生身份，如果选择其他邮箱后面步骤验证学生身份可能会遇到点麻烦（可能会接收不到验证邮件或遇到其他比较坑爹的问题，具体情况得看运气）。<br><img src="https://img-blog.csdnimg.cn/20181208142526254.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="85%"><br>之后再点击 Student Developer Pack 页面的 Yes，I’m a student 进入以下页面。<br><img src="https://img-blog.csdnimg.cn/20181208143234198.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="85%"><br>在 Verify academic status 那里，需要选择你的学校邮箱。如果你之前注册用的就是学校邮箱，那么就直接填入。但如果你之前注册时用的是自己的常用邮箱，那么你还需要点下面的 add and verify it 添加和验证学校邮箱（这里可能需要耐心等待GitHub审核，所以前面推荐直接用学校邮箱注册）。成功后这个列表就会有两个邮箱地址，然后选择学校邮箱。School name 就填学校的英文全称，Graduation year 选你的毕业年份，How do you plan to use Github 主要写你打算用 GitHub 干什么（用英文随便写一些：I’ll learn about programming and manage the project on GitHub.）。优惠能不能申请成功主要是看学校的邮箱。全部填完后点击 Submit Request 进入如下页面。<br><img src="https://img-blog.csdnimg.cn/20181208143554706.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="85%"><br>然后点击上面的 Student pack，页面跳转后再点击 Get your pack，便成功领到了学生礼包。页面往下翻，看到 DigitalOcean，点击 Request your offer code to get access，即可看到你的优惠码。将这个优惠码保存下来，后面会用到。<br><img src="https://img-blog.csdnimg.cn/20181208143858976.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="60%"></p>
+<h2 id="五-注册-DigitalOcean-并使用优惠"><a href="#五-注册-DigitalOcean-并使用优惠" class="headerlink" title="五.注册 DigitalOcean 并使用优惠"></a>五.注册 DigitalOcean 并使用优惠</h2><p>首先点击链接<a href="https://m.do.co/c/59b7e1df00f6" target="_blank" rel="noopener">https://m.do.co/c/59b7e1df00f6</a>进行注册<br><img src="https://img-blog.csdnimg.cn/20181208144707187.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="85%"><br>点击右上角Sign Up<br><img src="https://img-blog.csdnimg.cn/20181208144341862.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="60%"><br>上图提示说明创建账号即可获得100美元优惠。注册后邮箱会收到一封验证邮件，点击链接验证，验证后进入以下页面进行支付方式的选择。<br><img src="https://img-blog.csdnimg.cn/20181208144737725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>DigitalOcean 提供两种支付方式：信用卡和 PayPal。如果你有信用卡，那么输入信用卡的各项信息，最后点击 Save Card 即可成功，不需要有任何消费。如果没有信用卡，那么可以选择 PayPal。不过使用 PayPal 的话最少要充值 5 美元，差不多就是 35元人民币。PayPal 支持银联卡支付，填写相应的信息后付款即可。<br><img src="https://img-blog.csdnimg.cn/20181208144853827.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>也可以在<a href="https://www.paypal.com/c2/home" target="_blank" rel="noopener">PayPal中国官网</a>注册一个账号（方便以后进行海外交易支付使用），需要填写相应用户信息。<br><img src="https://img-blog.csdnimg.cn/20181208145118859.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20181208145135608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="50%"><br>支付成功后会进入创建服务器的页面。先不着急创建服务器，而是用前面获得的优惠码兑换 50 美元。点击图中右上角的头像，选择 Settings，然后点击左侧的 Billing，你会看到你的账户有 100 美元（如果是用 PayPal 的话，应该是 105 美元），这就是之前通过邀请链接注册的奖励。在该页面往下浏览，在Promo code输入你的优惠码，如果正常，那么点击 Apply Code 即可成功兑换。<br><img src="https://img-blog.csdnimg.cn/20181208145437726.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>如果提示 Account not eligible to use this promo code. 或者 Sorry, this promo cannot be applied to your account. Most promos are valid for new customers only.，那么就说明不能直接兑换，需要联系工作人员。点击页面顶端的 Support 进入 Support Center，点击右边的 Support tickets 进入以下页面。<br><img src="https://img-blog.csdnimg.cn/2018120814564570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>然后点击 Create New Ticket，给工作人员写一封反馈（用英文写）。大概就写你是一名学生，从 GitHub 领到了学生开发包，但是注册 DigitalOcean 后不能成功地使用优惠码，出现了什么提示，希望问题可以得到解决，并附上你的优惠码。然后就进入等待时间，几个小时以后，工作人员就会回复你的反馈，并将优惠添加到你的账户。（这 50 美元的有效期为 12 个月哦，即使你没有创建服务器，12个月后依然会失效，自己充值的余额不受影响）<br>注意：不要用同一张信用卡或者同一个 PayPal 账户来支付两个及以上的 DigitalOcean 账号，这样会被认为是欺骗行为，他们的原则是一个用户使用一次优惠。情节较轻的话，只是不给你添加优惠；情节较重的话，会被封号！</p>
+<h2 id="六-创建-DigitalOcean-服务器"><a href="#六-创建-DigitalOcean-服务器" class="headerlink" title="六.创建 DigitalOcean 服务器"></a>六.创建 DigitalOcean 服务器</h2><p>1.点击右上角的Create, 选择Droplets<img src="https://img-blog.csdnimg.cn/20181209192013309.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>2.选择镜像<br>都是基于Linux的系统，选择自己用着熟悉的就可以。个人使用的是Ubuntu系统，其他系统在后面配置环境时有些许不同，需按照各自系统的情况具体操作。<br><img src="https://img-blog.csdnimg.cn/20181209192216747.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>3.选择大小<br>这里根据个人需要，我们一般选择最便宜的即可。左边栏是常用的配置，如果你对计算量有要求，还能够选择右边的多核硬件。<br><img src="https://img-blog.csdnimg.cn/20181209192418676.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>4.选择服务器所在地区<br>一般来说中国大陆可选择美国的旧金山San Fransisco节点或新加坡Singapore节点。但是对于大陆不同地区，不同宽带提供商（联通或电信）这个速度会有不小差别，建议先通过这个网址：<a href="http://speedtest-sfo1.digitalocean.com/" target="_blank" rel="noopener">DigitalOcean测速</a>进行宽带测速。<br><img src="https://img-blog.csdnimg.cn/20181209192730141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20181209192635472.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="80%"><br>5.选择其他的附加项<br>如果你需要IPv6则在IPv6上打钩，不然全部不勾选即可，具体说明可以鼠标悬停查看，有些是收费项目要注意。<br><img src="https://img-blog.csdnimg.cn/20181209192828298.png" alt="在这里插入图片描述"><br>6.选择是否使用SSH keys登陆<br>SSH key是ssh中一种基于密钥的安全验证，你可以自己创建一对密钥，将公钥放在服务器上，然后我们在用本地的客户端例如putty登陆的时候就可以指定自己的私钥进行验证，省去了自己记密码的麻烦，也杜绝了假冒服务器的隐患，不过登陆时间上也会稍微变长。如何创建SSH keys这里不详述，建议参见网址：<a href="https://blog.csdn.net/happyhuirong/article/details/41729911" target="_blank" rel="noopener">DigitalOcean初始化–使用SSH Keys登录（Windows篇）</a>。而我比较嫌麻烦，所以这里就不创建SSH了。<br><img src="https://img-blog.csdnimg.cn/20181209193014157.png" alt="在这里插入图片描述"><br>7.命名并完成创建<br>最后给自己的host起一个方便记住的名字，点击Creat进行创建<br><img src="https://img-blog.csdnimg.cn/201812091932018.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>等待如下的进度条完成后，就创建完成<br><img src="https://img-blog.csdnimg.cn/20181209193542250.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="七-登陆服务器"><a href="#七-登陆服务器" class="headerlink" title="七.登陆服务器"></a>七.登陆服务器</h2><p>服务器创建完成后邮箱会收到如下的一封邮件告诉了你IP地址（IP Address）、用户名（Username）和初始密码（Password），记住这3项内容下面会用到：<br><img src="https://img-blog.csdnimg.cn/20181209202852886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="60%"><br>然后需要下载putty（Windows下最好用的SSH和Telnet客户端）来登陆服务器：<a href="http://www.putty.org/" target="_blank" rel="noopener">putty官网下载最近版本</a>，或<a href="https://pan.baidu.com/s/1i5sy3J3" target="_blank" rel="noopener">百度网盘下载putty（2017.10.08）</a>。<br>打开putty，输入如下内容：<br>Host Name：输入自己的IP<br>Port：输入22<br>Connection type：SSH<br>Saved Sessions：给自己取个登录名即可<br>然后我们先点击右边的Save进行保存，然后再点击下面的Open。下次就不用再输入这些内容直接双击记住的名字就可以进行连接。<br><img src="https://img-blog.csdnimg.cn/20181209200817659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="60%"><br>首次点击Open后我们看到下图提示，点击（是）：<br><img src="https://img-blog.csdnimg.cn/20181209200837329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="60%"><br>如下图，在login as处输入自己的用户名即root，回车，提示输入密码，输入密码后点击回车即可登陆（注意这里输入的密码是不可见的，也就是你输入密码的时候看不到输入了任何东西。putty中的粘贴快捷键是鼠标右键，千万不要用ctrl+v，也就是说你在邮件中复制了初始密码，在这里点一下右键，虽然什么都没有看到但是也点击回车即可）：<br><img src="https://img-blog.csdnimg.cn/20181209200951925.png" alt="在这里插入图片描述"><br>初始密码校验成功后，会让你必须修改初始密码：<br><img src="https://img-blog.csdnimg.cn/20181209201018437.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>输入一遍初始密码，回车再输入两遍新密码即可。<br><img src="https://img-blog.csdnimg.cn/2018120920104055.png" alt="在这里插入图片描述"></p>
+<h2 id="八-配置Shadowsocks服务器端"><a href="#八-配置Shadowsocks服务器端" class="headerlink" title="八.配置Shadowsocks服务器端"></a>八.配置Shadowsocks服务器端</h2><p>1.依次输入如下命令（输入#后的命令不输入#）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># apt-get update                              // 更新源中包列表</span><br><span class="line"># apt-get install python-pip                  // 安装pip</span><br><span class="line"># pip install --upgrade pip                   // 更新pip</span><br><span class="line"># apt-get install git                         // 安装git</span><br><span class="line"># pip install git+https://github.com/shadowsocks/shadowsocks.git@master   // 安装SS</span><br></pre></td></tr></table></figure>
+<p>如果遇到报错ImportError: cannot import name main<br>解决：pip文件在usr/bin目录下，cd进去，进行以下修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from pip import main</span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    sys.exit(main())</span><br></pre></td></tr></table></figure>
+<p>把上面的三行换成下面的三行即可解决问题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from pip import __main__</span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    sys.exit(__main__._main())</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://img-blog.csdnimg.cn/20181209210246879.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="70%"></p>
+<p>2.安装chacha20加密：<br>虽然shadowsocks的作者推荐使用aes-256-cfb的加密算法，但是这个算法对手机或者openwrt路由器的压力还是不小的，于是后来Google推出的chacha20算法因为其安全性和惊人的速度被现在更多人使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># apt-get install build-essential</span><br><span class="line"># wget https://github.com/jedisct1/libsodium/releases/download/1.0.8/libsodium-1.0.8.tar.gz</span><br><span class="line"># tar xf libsodium-1.0.8.tar.gz &amp;&amp; cd libsodium-1.0.8</span><br><span class="line"># ./configure &amp;&amp; make -j4</span><br><span class="line"># make install</span><br><span class="line"># ldconfig</span><br></pre></td></tr></table></figure>
+<p>3.服务器端Shadowsocks配置<br>echo语句后面要改变的地方只有password后面自己自定义一个密码，用于后面自己ss客户端登陆时候使用；server_port后面指定一个没有被占用的端口都可以，范围在1-65535之间。server后面就写两个冒号代表使用缺省设置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># touch /etc/shadowsocks.json          // 创建SS配置文件</span><br><span class="line"># echo &apos;&#123;&quot;server&quot;:&quot;::&quot;, &quot;server_port&quot;:8388, &quot;local_address&quot;: &quot;127.0.0.1&quot;, &quot;local_port&quot;:1080, &quot;password&quot;:&quot;yourpassword&quot;, &quot;timeout&quot;:300, &quot;method&quot;:&quot;chacha20&quot;, &quot;fast_open&quot;: false &#125;&apos; &gt; /etc/shadowsocks.json        // 追加配置</span><br></pre></td></tr></table></figure>
+<p>4.服务器端的启动与停止<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># ssserver -c /etc/shadowsocks.json -d start   //后台开启</span><br><span class="line"># ssserver -c /etc/shadowsocks.json -d stop    //后台停止（一般不用停止）</span><br></pre></td></tr></table></figure></p>
+<p>看到下图出现started字样，即成功开启服务器端ss!<br><img src="https://img-blog.csdnimg.cn/20181209211010687.png" alt="在这里插入图片描述"></p>
+<h2 id="九-Windows客户端Shadowsocks配置"><a href="#九-Windows客户端Shadowsocks配置" class="headerlink" title="九.Windows客户端Shadowsocks配置"></a>九.Windows客户端Shadowsocks配置</h2><p><a href="https://pan.baidu.com/s/1nuCsMH7" target="_blank" rel="noopener">百度网盘下载Shadowsocks 客户端</a>解压缩，win7以上用4.0版本。打开后，看到在任务栏出现了个小飞机<br><img src="https://img-blog.csdnimg.cn/20181209201438138.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="30%"><br>右键—服务器—编辑服务器：</p>
+<blockquote>
+<p>服务器IP：输入自己的IP<br>服务器端口：输入自己在上面echo命令后输入的server_port后的数字<br>密码：输入自己在上面echo命令后输入的password后的密码<br>加密：选chacha20<br>协议：origin<br>混淆：plain<br><img src="https://img-blog.csdnimg.cn/20181209201535991.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</blockquote>
+<p>点击「添加」即完成windows端配置,另外可在小飞机右键—系统代理模式中选择是PAC模式（只在有限的网址里使用代理）还是全局模式（所有请求都使用代理）。</p>
+<h2 id="十-Android端Shadowsocks-配置"><a href="#十-Android端Shadowsocks-配置" class="headerlink" title="十.Android端Shadowsocks 配置"></a>十.Android端Shadowsocks 配置</h2><p><a href="https://pan.baidu.com/s/1nvp8vwd" target="_blank" rel="noopener">百度网盘下载影梭客户端app（2017.10.08）</a><br>可以校验文件MD5 File Hash: a7d32c91f0e650e43db3da6d0f8a9be3<br>安装后打开app点击右上角的加号—手动设置添加Shadowsocks服务器：<br><img src="https://img-blog.csdnimg.cn/20181209201809793.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="60%"><br>添加后，点击√保存，在主界面点击小飞机，小飞机变绿后看到下面的「发送」和「接收」都开始出现数字即连接成功。<br><img src="https://img-blog.csdnimg.cn/20181209201835421.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="60%"></p>
+<h2 id="十一-iOS-客户端"><a href="#十一-iOS-客户端" class="headerlink" title="十一.iOS 客户端"></a>十一.iOS 客户端</h2><p>iOS 系统很多可用的客户端已被下架，包括 Shadowrocket（目前已被下架，之前安装的使用不受影响）。PP 助手里面可以搜到一个 Wingy, 安装后点击右上角的 +，选择 Shadowsocks(R) 类型，在服务器和密码项输入你自己的服务器和密码，端口填 8388，然后保存。线路添加成功后，点击首页的未连接 ，在弹出框中选择 Allow，添加成功后即可正常使用。<br><img src="https://img-blog.csdnimg.cn/20181209202206577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xZS1hIVFA=,size_16,color_FFFFFF,t_70" width="60%"></p>
+<p><a href="https://mofiter.com/2017/04/20/%E5%88%A9%E7%94%A8-DigitalOcean-%E5%92%8C-Shadowsocks-%E8%BF%9B%E8%A1%8C%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/?tdsourcetag=s_pctim_aiomsg" target="_blank" rel="noopener">参考链接1:利用 DigitalOcean 和 Shadowsocks 进行科学上网</a><br><a href="https://segmentfault.com/a/1190000011564797" target="_blank" rel="noopener">参考链接2:DigitalOcean搭建shadowsocks梯子完全图文记录（Win+Android）</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/18/Beginning/" rel="next" title="The first note">
+                <i class="fa fa-chevron-left"></i> The first note
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Yoc Lu" />
+            
+              <p class="site-author-name" itemprop="name">Yoc Lu</p>
+              <p class="site-description motion-element" itemprop="description">But I have promises to keep. And miles to go before I sleep.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Searcher408" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:searcher408@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DigitalOcean搭建VPS实现科学上网"><span class="nav-number">1.</span> <span class="nav-text">DigitalOcean搭建VPS实现科学上网</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-简介"><span class="nav-number">1.1.</span> <span class="nav-text">一.简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-学生优惠"><span class="nav-number">1.2.</span> <span class="nav-text">二.学生优惠</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三-申请教育邮箱"><span class="nav-number">1.2.1.</span> <span class="nav-text">三.申请教育邮箱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四-申请-GitHub-学生优惠"><span class="nav-number">1.2.2.</span> <span class="nav-text">四.申请 GitHub 学生优惠</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-注册-DigitalOcean-并使用优惠"><span class="nav-number">1.3.</span> <span class="nav-text">五.注册 DigitalOcean 并使用优惠</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六-创建-DigitalOcean-服务器"><span class="nav-number">1.4.</span> <span class="nav-text">六.创建 DigitalOcean 服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七-登陆服务器"><span class="nav-number">1.5.</span> <span class="nav-text">七.登陆服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八-配置Shadowsocks服务器端"><span class="nav-number">1.6.</span> <span class="nav-text">八.配置Shadowsocks服务器端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#九-Windows客户端Shadowsocks配置"><span class="nav-number">1.7.</span> <span class="nav-text">九.Windows客户端Shadowsocks配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十-Android端Shadowsocks-配置"><span class="nav-number">1.8.</span> <span class="nav-text">十.Android端Shadowsocks 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十一-iOS-客户端"><span class="nav-number">1.9.</span> <span class="nav-text">十一.iOS 客户端</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yoc Lu</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
