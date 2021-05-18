@@ -1,7 +1,8 @@
-# Searcher408.github.io
-My  Blog
+# My  Blog
+
 A personal blog based on Github Page and Hexo.
 
+'''
 .
 ├── _config.yml # 网站的配置信息
 ├── package.json
@@ -10,3 +11,4 @@ A personal blog based on Github Page and Hexo.
 |   ├── _drafts # 草稿文件
 |   └── _posts # 文章Markdowm文件 
 └── themes  # 主题文件夹
+'''
